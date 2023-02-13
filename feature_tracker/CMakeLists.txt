@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(feature_tracker)
 
 set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++17")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g")
 
 find_package(catkin REQUIRED COMPONENTS
@@ -10,11 +10,21 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     sensor_msgs
     cv_bridge
-    camera_model
+    # camera_model
     message_filters
     )
-Set(OpenCV_DIR "/home/healer/Downloads/opencv3.2/opencv-3.2.0/build") # important find opencv version
-find_package(OpenCV 3.2 QUIET)
+# Set(OpenCV_DIR "/home/healer/Downloads/opencv3.2/opencv-3.2.0/build") # important find opencv version
+# find_package(OpenCV 3.2 QUIET)
+find_package(OpenCV REQUIRED)
+MESSAGE("OPENCV VERSION:")
+MESSAGE(${OpenCV_VERSION})
+include_directories(${OpenCV2_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS} )
+include_directories(
+  ${PROJECT_SOURCE_DIR}/../camera_model/include
+)
+
+
 
 catkin_package()
 
@@ -27,7 +37,8 @@ find_package(Eigen3  REQUIRED)
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
-  /home/healer/catkin_PLVINS/src/PL-VINS/feature_tracker/src/line_descriptor/include # find LSD 
+#   /home/healer/catkin_PLVINS/src/PL-VINS/feature_tracker/src/line_descriptor/include # find LSD 
+  ${PROJECT_SOURCE_DIR}/src/line_descriptor/include
 ) 
 
 add_executable(feature_tracker
@@ -36,7 +47,7 @@ add_executable(feature_tracker
     src/feature_tracker.cpp
     )
 
-target_link_libraries(feature_tracker ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(feature_tracker ${catkin_LIBRARIES} ${OpenCV_LIBS} ${PROJECT_SOURCE_DIR}/../camera_model/build/devel/lib/libcamera_model.so)
 
 # line detect and match
 add_executable(LineFeature_tracker    
@@ -58,5 +69,5 @@ add_executable(LineFeature_tracker
 target_link_libraries(LineFeature_tracker 
 ${catkin_LIBRARIES} 
 ${OpenCV_LIBS}
-/home/healer/catkin_PLVINS/src/PL-VINS/feature_tracker/src/line_descriptor/lib/liblinedesc.so  # line feature
+${PROJECT_SOURCE_DIR}/src/line_descriptor/lib/liblinedesc.so  # line feature
 )

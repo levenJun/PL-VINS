@@ -1,4 +1,5 @@
 *~
 .vscode/
 */.vscode/
-
+camera_model/build
+feature_tracker/src/line_descriptor/build

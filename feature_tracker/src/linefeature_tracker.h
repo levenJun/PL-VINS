@@ -11,7 +11,9 @@
 
 #include "parameters.h"
 #include "tic_toc.h"
-
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui/highgui_c.h>
+#include <opencv2/imgproc/types_c.h>
 // #include <opencv2/line_descriptor.hpp>
 #include <opencv2/features2d.hpp>
 
